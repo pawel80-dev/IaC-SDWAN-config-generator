@@ -8,7 +8,6 @@ from email_api import email_with_attachment
 MANAGER_URL = os.environ["MANAGER_URL"]
 MANAGER_LOGIN = os.environ["MANAGER_LOGIN"]
 MANAGER_PASS = os.environ["MANAGER_PASS"]
-DEVICE_UUID = os.environ["DEVICE_UUID"]
 SMTP_SERVER = os.environ["SMTP_SERVER"]
 EMAIL_SENDER = os.environ["EMAIL_SENDER"]
 EMAIL_SENDER_PASSWORD = os.environ["EMAIL_SENDER_PASSWORD"]
@@ -17,9 +16,9 @@ EMAIL_RECEIVER = os.environ["EMAIL_RECEIVER"]
 # site_id = ""
 site_id = sys.argv[1]
 attachment_name = "ciscosdwan.cfg"
-email_subject = f"Bootstrap config for {DEVICE_UUID}"
+email_subject = f"Bootstrap config for {site_id}"
 email_body = f"""\
-Subject: Bootstrap config for {DEVICE_UUID}.
+Subject: Bootstrap config for {site_id}.
 
 Do not respond to this email.
 Please make sure that attached file name is: ciscosdwan.cfg.
