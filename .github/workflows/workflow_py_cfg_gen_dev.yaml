@@ -36,7 +36,6 @@ jobs:
       #     MANAGER_URL: ${{ secrets.MANAGER_URL }}
       #     MANAGER_LOGIN: ${{ secrets.MANAGER_LOGIN }}
       #     MANAGER_PASS: ${{ secrets.MANAGER_PASS }}
-      #     DEVICE_UUID: ${{ secrets.DEVICE_UUID }}
       #   run: |
       #     python source/app_cfg_gen.py
 
