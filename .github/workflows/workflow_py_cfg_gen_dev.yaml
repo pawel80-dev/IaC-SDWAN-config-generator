@@ -1,0 +1,42 @@
+name: Python config generator dev
+
+on:
+  push:
+    branches:
+      # - 'main'
+      - 'dev'
+
+jobs:
+  deploy:
+    name: Generate SDWAN initial config
+    runs-on: self-hosted
+    # environment: development
+    steps:
+      - name: 'Checkout repository'
+        uses: actions/checkout@v5
+
+      # - name: 'Python: Install'
+      #   uses: actions/setup-python@v5
+      #   with:
+      #     python-version: '3.13'
+      #     architecture: 'x64'
+
+      # - name: 'Python: Install dependencies'
+      #   run: |
+      #     python --version
+      #     python -m pip install --upgrade pip
+      #     python -m pip install -r source/requirements.txt
+
+      # - name: 'Python: SD-WAN config generator'
+      #   env:
+      #     SMTP_SERVER: ${{ secrets.SMTP_SERVER }}
+      #     EMAIL_SENDER: ${{ secrets.EMAIL_SENDER }}
+      #     EMAIL_SENDER_PASSWORD: ${{ secrets.EMAIL_SENDER_PASSWORD }}
+      #     EMAIL_RECEIVER: ${{ secrets.EMAIL_RECEIVER }}
+      #     MANAGER_URL: ${{ secrets.MANAGER_URL }}
+      #     MANAGER_LOGIN: ${{ secrets.MANAGER_LOGIN }}
+      #     MANAGER_PASS: ${{ secrets.MANAGER_PASS }}
+      #     DEVICE_UUID: ${{ secrets.DEVICE_UUID }}
+      #   run: |
+      #     python source/app_cfg_gen.py
+
