@@ -15,7 +15,7 @@ on:
         default: 'None'
 
 jobs:
-  deploy:
+  python_code:
     name: Generate SDWAN initial config
     runs-on: self-hosted
     steps:
@@ -46,3 +46,25 @@ jobs:
           MANAGER_PASS: ${{ secrets.MANAGER_PASS }}
         run: |
           python source/app_cfg_gen.py ${{ github.event.inputs.site_id }}
+
+
+  function_deploy:
+    name: Azure Function App Deploy
+    # runs-on: self-hosted
+    runs-on: ubuntu-latest
+    needs: python_code
+    environment: development
+    steps:
+        - name: 'Azure CLI login'
+          uses: azure/login@v2
+          with:
+            client-id: ${{ secrets.AZURE_CLIENT_ID }}
+            tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+            subscription-id: ${{ secrets.AZURE_SUB_ID }}
+          
+        - name: 'Run the Azure Functions action'
+          uses: azure/functions-action@v1
+          id: deploy-to-function-app
+          with:
+            app-name: ${{ env.AZURE_FUNCTIONAPP_NAME }}
+            package: '${{ env.AZURE_FUNCTIONAPP_PROJECT_PATH }}'
