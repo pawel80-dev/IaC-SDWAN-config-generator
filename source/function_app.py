@@ -26,19 +26,19 @@ def get_basic(req: func.HttpRequest) -> str:
     return f"Hello, {user}!"
 
 
-@app.function_name(name="ConfigGenerator")
-@app.route(route="cfg", auth_level=func.AuthLevel.ANONYMOUS)
-def conf_gen(req: func.HttpRequest) -> str:
-    logging.info("AZ-FUNC ConfigGenerator started.")
-    site_id = req.params.get("site_id")
-    attachment_name = "ciscosdwan.cfg"
-    email_subject = f"Bootstrap config for {site_id}"
-    email_body = f"""\
-    Subject: Bootstrap config for {site_id}.
+# @app.function_name(name="ConfigGenerator")
+# @app.route(route="cfg", auth_level=func.AuthLevel.ANONYMOUS)
+# def conf_gen(req: func.HttpRequest) -> str:
+#     logging.info("AZ-FUNC ConfigGenerator started.")
+#     site_id = req.params.get("site_id")
+#     attachment_name = "ciscosdwan.cfg"
+#     email_subject = f"Bootstrap config for {site_id}"
+#     email_body = f"""\
+#     Subject: Bootstrap config for {site_id}.
 
-    Do not respond to this email.
-    Please make sure that attached file name is: ciscosdwan.cfg.
-    If so, please copy the file to a USB drive and plug it into the router.
-    """
+#     Do not respond to this email.
+#     Please make sure that attached file name is: ciscosdwan.cfg.
+#     If so, please copy the file to a USB drive and plug it into the router.
+#     """
 
-    return f"Hello, site ID is: {site_id}!"
+#     return f"Hello, site ID is: {site_id}!"
