@@ -53,10 +53,11 @@ jobs:
         run: |
           python source/app_cfg_gen.py ${{ github.event.inputs.site_id }}
 
-      - uses: actions/upload-artifact@v4
+      - name: 'Upload artifact'
+        uses: actions/upload-artifact@v4
         with:
           name: fa-py-code-artifact
-          path: path/to/artifact/ # or path/to/artifact
+          path: ${{ env.AZ_FUNC_APP_PROJECT_PATH }}
 
 
   function_deploy:
@@ -69,9 +70,11 @@ jobs:
       id-token: write # Required for OIDC
       contents: read # Required for actions/checkout
     steps:
-      - uses: actions/download-artifact@v4
+      - name: 'Download artifact'
+        uses: actions/download-artifact@v4
         with:
           name: fa-py-code-artifact
+
       - name: Display structure of downloaded files
         run: ls -R
 
