@@ -90,6 +90,4 @@ jobs:
         id: deploy-to-function-app
         with:
           app-name: ${{ env.AZ_FUNC_APP_NAME }}
-          package: '${{ env.AZ_FUNC_APP_PROJECT_PATH }}'
-
-
+          package: ${{ env.AZ_FUNC_APP_PROJECT_PATH }}
