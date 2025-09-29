@@ -7,8 +7,9 @@ logging.basicConfig(level=logging.INFO)
 app = func.FunctionApp()
 
 
+# https://yourfunc.azurewebsites.net/api?user=YourName
 @app.function_name(name="HttpTrigger-basic")
-@app.route(route="req")
+@app.route(route="req", auth_level=func.AuthLevel.ANONYMOUS)
 def main(req: func.HttpRequest) -> str:
     logging.info("AZ-FUNC HttpTrigger-basic started.")
     user = req.params.get("user")
