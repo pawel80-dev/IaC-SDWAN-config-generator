@@ -16,7 +16,8 @@ on:
         default: 'None'
 
 env:
-  AZ_FUNC_APP_NAME: 'func-app-v2-dev' # set this to your function app name
+  AZ_FUNC_ARTIFACT: 'fa-py-code-artifact'
+  AZ_FUNC_APP: 'func-app-v2-dev' # set this to your function app name
   AZ_FUNC_APP_PROJECT_PATH: 'source'
 
 jobs:
@@ -56,7 +57,7 @@ jobs:
       - name: 'Upload artifact'
         uses: actions/upload-artifact@v4
         with:
-          name: fa-py-code-artifact
+          name: ${{ env.AZ_FUNC_ARTIFACT }}
           path: ${{ env.AZ_FUNC_APP_PROJECT_PATH }}
 
 
@@ -73,7 +74,7 @@ jobs:
       - name: 'Download artifact'
         uses: actions/download-artifact@v4
         with:
-          name: fa-py-code-artifact
+          name: ${{ env.AZ_FUNC_ARTIFACT }}
 
       - name: Display structure of downloaded files
         run: ls -R
@@ -89,5 +90,5 @@ jobs:
         uses: azure/functions-action@v1
         id: deploy-to-function-app
         with:
-          app-name: ${{ env.AZ_FUNC_APP_NAME }}
-          package: ${{ env.AZ_FUNC_APP_PROJECT_PATH }}
+          app-name: ${{ env.AZ_FUNC_APP }}
+          # package: ${{ env.AZ_FUNC_APP_PROJECT_PATH }}
