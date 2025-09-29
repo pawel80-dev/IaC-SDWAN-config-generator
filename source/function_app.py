@@ -19,7 +19,7 @@ app = func.FunctionApp()
 # route parameter is changed: api/{functionname} to api/req
 # https://functionAppName.azurewebsites.net/api/req?user=YourName
 @app.function_name(name="HttpTrigger-basic")
-@app.route(route="req", auth_level=func.AuthLevel.ANONYMOUS)
+@app.route(route="get", auth_level=func.AuthLevel.ANONYMOUS)
 def get_basic(req: func.HttpRequest) -> str:
     logging.info("AZ-FUNC HttpTrigger-basic started.")
     user = req.params.get("user")
@@ -27,7 +27,7 @@ def get_basic(req: func.HttpRequest) -> str:
 
 
 @app.function_name(name="ConfigGenerator")
-@app.route(route="req", auth_level=func.AuthLevel.ANONYMOUS)
+@app.route(route="cfg", auth_level=func.AuthLevel.ANONYMOUS)
 def conf_gen(req: func.HttpRequest) -> str:
     logging.info("AZ-FUNC ConfigGenerator started.")
     site_id = req.params.get("site_id")
