@@ -20,7 +20,7 @@ app = func.FunctionApp()
 # https://functionAppName.azurewebsites.net/api/req?user=YourName
 @app.function_name(name="HttpTrigger-basic")
 @app.route(route="req", auth_level=func.AuthLevel.ANONYMOUS)
-def main(req: func.HttpRequest) -> str:
+def get_basic(req: func.HttpRequest) -> str:
     logging.info("AZ-FUNC HttpTrigger-basic started.")
     user = req.params.get("user")
     return f"Hello, {user}!"
@@ -28,7 +28,7 @@ def main(req: func.HttpRequest) -> str:
 
 @app.function_name(name="ConfigGenerator")
 @app.route(route="req", auth_level=func.AuthLevel.ANONYMOUS)
-def main(req: func.HttpRequest) -> str:
+def conf_gen(req: func.HttpRequest) -> str:
     logging.info("AZ-FUNC ConfigGenerator started.")
     site_id = req.params.get("site_id")
     attachment_name = "ciscosdwan.cfg"
@@ -40,5 +40,5 @@ def main(req: func.HttpRequest) -> str:
     Please make sure that attached file name is: ciscosdwan.cfg.
     If so, please copy the file to a USB drive and plug it into the router.
     """
-    
+
     return f"Hello, site ID is: {site_id}!"
