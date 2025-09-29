@@ -69,7 +69,7 @@ jobs:
       id-token: write # Required for OIDC
       contents: read # Required for actions/checkout
     steps:
-      - uses: actions/download-artifact@v5
+      - uses: actions/download-artifact@v4
         with:
           name: fa-py-code-artifact
       - name: Display structure of downloaded files
