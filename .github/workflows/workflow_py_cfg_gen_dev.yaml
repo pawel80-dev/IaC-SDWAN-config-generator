@@ -19,6 +19,7 @@ env:
   AZ_FUNC_ARTIFACT: 'fa-py-code-artifact'
   AZ_FUNC_APP: 'func-app-v2-dev' # set this to your function app name
   AZ_FUNC_APP_PROJECT_PATH: 'source'
+  AZ_RG: 'RG-TF-DEV-FUNC'
   SMTP_SERVER: ${{ secrets.SMTP_SERVER }}
   EMAIL_SENDER: ${{ secrets.EMAIL_SENDER }}
   EMAIL_SENDER_PASSWORD: ${{ secrets.EMAIL_SENDER_PASSWORD }}
@@ -98,7 +99,7 @@ jobs:
         with:
           azcliversion: latest
           inlineScript: |
-            az functionapp config appsettings set --name ${{ env.AZ_FUNC_APP }} --settings \
+            az functionapp config appsettings set -g ${{ env.AZ_RG }} -n ${{ env.AZ_FUNC_APP }} --settings \
               SMTP_SERVER="${{ secrets.SMTP_SERVER }}" \
               EMAIL_SENDER="${{ secrets.EMAIL_SENDER }}" \
               EMAIL_SENDER_PASSWORD="${{ secrets.EMAIL_SENDER_PASSWORD }}" \
