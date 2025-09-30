@@ -1,8 +1,8 @@
 import logging
 import os
 import azure.functions as func
-from azure.identity import ManagedIdentityCredential
-from azure.keyvault.secrets import SecretClient
+# from azure.identity import ManagedIdentityCredential
+# from azure.keyvault.secrets import SecretClient
 
 # Set up logging on info level
 logging.basicConfig(level=logging.INFO)
@@ -10,7 +10,7 @@ logging.basicConfig(level=logging.INFO)
 app = func.FunctionApp()
 
 
-# route parameter is changed: api/{functionname} to api/req
+# route parameter is changed: api/{functionname} to api/get
 # https://functionAppName.azurewebsites.net/api/get?user=YourName
 @app.function_name(name="HttpTrigger-basic")
 @app.route(route="get", auth_level=func.AuthLevel.ANONYMOUS)
@@ -35,10 +35,10 @@ def conf_gen(req: func.HttpRequest) -> str:
     KEY_VAULT_URL = os.environ["KEY_VAULT_URL"]
     MI_CLIENT_ID = os.environ["MI_CLIENT_ID"]
 
-    credential = ManagedIdentityCredential(client_id=MI_CLIENT_ID)
-    client = SecretClient(vault_url=KEY_VAULT_URL, credential=credential)
-    MANAGER_LOGIN = client.get_secret("MANAGER-LOGIN").value
-    MANAGER_PASS = client.get_secret("MANAGER-PASS").value
+    # credential = ManagedIdentityCredential(client_id=MI_CLIENT_ID)
+    # client = SecretClient(vault_url=KEY_VAULT_URL, credential=credential)
+    # MANAGER_LOGIN = client.get_secret("MANAGER-LOGIN").value
+    # MANAGER_PASS = client.get_secret("MANAGER-PASS").value
     site_id = req.params.get("site_id")
     attachment_name = "ciscosdwan.cfg"
     email_subject = f"Bootstrap config for {site_id}"
