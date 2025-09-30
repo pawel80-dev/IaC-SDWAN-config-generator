@@ -27,6 +27,8 @@ env:
   MANAGER_URL: ${{ secrets.MANAGER_URL }}
   MANAGER_LOGIN: ${{ secrets.MANAGER_LOGIN }}
   MANAGER_PASS: ${{ secrets.MANAGER_PASS }}
+  KEY_VAULT_URL: ${{ secrets.KEY_VAULT_URL }}
+  MI_CLIENT_ID: ${{ secrets.MI_CLIENT_ID }}
 
 jobs:
   python_code:
@@ -94,6 +96,7 @@ jobs:
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUB_ID }}
 
+      # Key Vault access is done via Managed Identity
       - name: 'Azure Function App config'
         uses: azure/cli@v2
         with:
@@ -106,7 +109,9 @@ jobs:
               EMAIL_RECEIVER="${{ secrets.EMAIL_RECEIVER }}" \
               MANAGER_URL="${{ secrets.MANAGER_URL }}" \
               MANAGER_LOGIN="${{ secrets.MANAGER_LOGIN }}" \
-              MANAGER_PASS="${{ secrets.MANAGER_PASS }}"
+              MANAGER_PASS="${{ secrets.MANAGER_PASS }}" \
+              KEY_VAULT_URL="${{ secrets.KEY_VAULT_URL }}" \
+              MI_CLIENT_ID="${{ secrets.MI_CLIENT_ID }}"
 
       - name: 'Azure Function App deployment'
         uses: azure/functions-action@v1
