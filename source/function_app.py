@@ -37,8 +37,8 @@ def conf_gen(req: func.HttpRequest) -> str:
 
     credential = ManagedIdentityCredential(client_id=MI_CLIENT_ID)
     client = SecretClient(vault_url=KEY_VAULT_URL, credential=credential)
-    MANAGER_LOGIN = client.get_secret("manager-login").value
-    MANAGER_PASS = client.get_secret("manager-pass").value
+    MANAGER_LOGIN = client.get_secret("MANAGER-LOGIN").value
+    MANAGER_PASS = client.get_secret("MANAGER-PASS").value
     site_id = req.params.get("site_id")
     attachment_name = "ciscosdwan.cfg"
     email_subject = f"Bootstrap config for {site_id}"
