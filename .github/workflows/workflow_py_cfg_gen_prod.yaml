@@ -1,70 +1,17 @@
 name: Python config generator prod
 
 on:
-  # push:
-  #   branches:
-  #     - 'main'
-
-  # workflow needs to be started manually from main branch
-  workflow_dispatch:
-    inputs:
-      site_id:
-        description: 'Site name:'
-        required: true
-        type: string
-        default: 'None'
+  push:
+    branches:
+      - 'main'
 
 jobs:
-  python_code:
-    name: Generate SDWAN initial config
-    runs-on: self-hosted
+  terraform:
+    name: 'Az Function Python deployment'
+    runs-on: ubuntu-latest
     steps:
       - name: 'Checkout repository'
         uses: actions/checkout@v5
 
-      - name: 'Python: Install'
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.13'
-          architecture: 'x64'
-
-      - name: 'Python: Install dependencies'
-        run: |
-          python --version
-          python -m pip install --upgrade pip
-          python -m pip install -r source/requirements.txt
-
-      - name: 'Python: SD-WAN config generator'
-        if: ${{ github.event.inputs.site_id != 'None' && github.event.inputs.site_id != '' }}
-        env:
-          SMTP_SERVER: ${{ secrets.SMTP_SERVER }}
-          EMAIL_SENDER: ${{ secrets.EMAIL_SENDER }}
-          EMAIL_SENDER_PASSWORD: ${{ secrets.EMAIL_SENDER_PASSWORD }}
-          EMAIL_RECEIVER: ${{ secrets.EMAIL_RECEIVER }}
-          MANAGER_URL: ${{ secrets.MANAGER_URL }}
-          MANAGER_LOGIN: ${{ secrets.MANAGER_LOGIN }}
-          MANAGER_PASS: ${{ secrets.MANAGER_PASS }}
-        run: |
-          python source/app_cfg_gen.py ${{ github.event.inputs.site_id }}
-
-
-  function_deploy:
-    name: Azure Function App Deploy
-    # runs-on: self-hosted
-    runs-on: ubuntu-latest
-    needs: python_code
-    environment: development
-    steps:
-        - name: 'Azure CLI login'
-          uses: azure/login@v2
-          with:
-            client-id: ${{ secrets.AZURE_CLIENT_ID }}
-            tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-            subscription-id: ${{ secrets.AZURE_SUB_ID }}
-          
-        - name: 'Run the Azure Functions action'
-          uses: azure/functions-action@v1
-          id: deploy-to-function-app
-          with:
-            app-name: ${{ env.AZURE_FUNCTIONAPP_NAME }}
-            package: '${{ env.AZURE_FUNCTIONAPP_PROJECT_PATH }}'
+      - name: Main branch - Prod info
+        run: echo "Lack of resources to build Azure Function PROD environment..."

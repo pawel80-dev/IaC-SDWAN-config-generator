@@ -92,18 +92,25 @@ jobs:
           client-id: ${{ secrets.AZURE_CLIENT_ID }}
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUB_ID }}
-        
-      - name: 'Run the Azure Functions action'
+
+      - name: 'Azure Function App config'
+        uses: azure/cli@v2
+        with:
+          azcliversion: latest
+          inlineScript: |
+            az functionapp config appsettings set --name ${{ env.AZ_FUNC_APP }} --settings \
+              SMTP_SERVER="${{ secrets.SMTP_SERVER }}" \
+              EMAIL_SENDER="${{ secrets.EMAIL_SENDER }}" \
+              EMAIL_SENDER_PASSWORD="${{ secrets.EMAIL_SENDER_PASSWORD }}" \
+              EMAIL_RECEIVER="${{ secrets.EMAIL_RECEIVER }}" \
+              MANAGER_URL="${{ secrets.MANAGER_URL }}" \
+              MANAGER_LOGIN="${{ secrets.MANAGER_LOGIN }}" \
+              MANAGER_PASS="${{ secrets.MANAGER_PASS }}"
+
+      - name: 'Azure Function App deployment'
         uses: azure/functions-action@v1
         id: deploy-to-function-app
         with:
           app-name: ${{ env.AZ_FUNC_APP }}
-          # package: ${{ env.AZ_FUNC_APP_PROJECT_PATH }}
-        # env:
-        #   SMTP_SERVER: ${{ secrets.SMTP_SERVER }}
-        #   EMAIL_SENDER: ${{ secrets.EMAIL_SENDER }}
-        #   EMAIL_SENDER_PASSWORD: ${{ secrets.EMAIL_SENDER_PASSWORD }}
-        #   EMAIL_RECEIVER: ${{ secrets.EMAIL_RECEIVER }}
-        #   MANAGER_URL: ${{ secrets.MANAGER_URL }}
-        #   MANAGER_LOGIN: ${{ secrets.MANAGER_LOGIN }}
-        #   MANAGER_PASS: ${{ secrets.MANAGER_PASS }}
+
+
