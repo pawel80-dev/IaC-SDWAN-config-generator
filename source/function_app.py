@@ -5,14 +5,6 @@ import os
 # Set up logging on info level
 logging.basicConfig(level=logging.INFO)
 
-# MANAGER_URL = os.environ["MANAGER_URL"]
-# MANAGER_LOGIN = os.environ["MANAGER_LOGIN"]
-# MANAGER_PASS = os.environ["MANAGER_PASS"]
-# SMTP_SERVER = os.environ["SMTP_SERVER"]
-# EMAIL_SENDER = os.environ["EMAIL_SENDER"]
-# EMAIL_SENDER_PASSWORD = os.environ["EMAIL_SENDER_PASSWORD"]
-# EMAIL_RECEIVER = os.environ["EMAIL_RECEIVER"]
-
 app = func.FunctionApp()
 
 
@@ -49,4 +41,4 @@ def conf_gen(req: func.HttpRequest) -> str:
     If so, please copy the file to a USB drive and plug it into the router.
     """
 
-    return f"Hello, site ID is: {site_id}!"
+    return f"Hello, site ID is: {site_id}, email reiver is: {EMAIL_RECEIVER}!"
