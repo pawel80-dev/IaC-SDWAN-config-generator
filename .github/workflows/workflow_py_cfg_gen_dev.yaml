@@ -66,7 +66,7 @@ jobs:
           pwd
           ls -l
           python -m pip install --upgrade pip
-          python -m pip install -r requirements.txt
+          python -m pip install -r source/requirements.txt
           # python -m pip install --target='./source/.python_packages/lib/site-packages' -r source/requirements.txt
           pwd
           ls -l
