@@ -76,7 +76,6 @@ jobs:
         with:
           name: ${{ env.AZ_FUNC_ARTIFACT }}
           path: |
-            .
             !venv/
             ${{ env.AZ_FUNC_APP_PROJECT_PATH }}
 
