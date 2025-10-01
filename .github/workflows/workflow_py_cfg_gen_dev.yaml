@@ -20,15 +20,6 @@ env:
   AZ_FUNC_APP: 'func-app-v2-dev' # set this to your function app name
   AZ_FUNC_APP_PROJECT_PATH: 'source'
   AZ_RG: 'RG-TF-DEV-FUNC'
-  # SMTP_SERVER: ${{ secrets.SMTP_SERVER }}
-  # EMAIL_SENDER: ${{ secrets.EMAIL_SENDER }}
-  # EMAIL_SENDER_PASSWORD: ${{ secrets.EMAIL_SENDER_PASSWORD }}
-  # EMAIL_RECEIVER: ${{ secrets.EMAIL_RECEIVER }}
-  # MANAGER_URL: ${{ secrets.MANAGER_URL }}
-  # MANAGER_LOGIN: ${{ secrets.MANAGER_LOGIN }}
-  # MANAGER_PASS: ${{ secrets.MANAGER_PASS }}
-  # KEY_VAULT_URL: ${{ secrets.KEY_VAULT_URL }}
-  # MI_CLIENT_ID: ${{ secrets.MI_CLIENT_ID }}
 
 jobs:
   python_code:
@@ -119,6 +110,7 @@ jobs:
         id: deploy-to-function-app
         with:
           app-name: ${{ env.AZ_FUNC_APP }}
+          # Do not use below options for Flex Consumption plan
           # scm-do-build-during-deployment: true
           # enable-oryx-build: true
           remote-build: true
