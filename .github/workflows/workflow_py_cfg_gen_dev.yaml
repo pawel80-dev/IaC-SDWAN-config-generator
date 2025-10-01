@@ -45,34 +45,11 @@ jobs:
           python-version: '3.12'
           architecture: 'x64'
 
-      # - name: 'Create and start virtual env'
-      #   run: |
-      #     python -m venv venv
-      #     source venv/bin/activate
-
-      # # this Action should follow steps to set up Python build environment
-      # - name: Install Python dependencies
-      #   uses: py-actions/py-dependency-install@v4
-      #   with:
-      #     path: "source/requirements.txt"
-      #     update-pip: "true"
-      #     update-setuptools: "false"
-      #     update-wheel: "false"
-
       - name: 'Python: Install dependencies'
         run: |
-          # cd source
-          # pushd './source'
-          python --version
-          pwd
-          ls -l
           python -m pip install --upgrade pip
           python -m pip install -r source/requirements.txt
-          # python -m pip install --target='.python_packages/lib/site-packages' -r requirements.txt
-          # popd
-          pwd
-          ls -l
-          ls -l source/
+          # python -m pip install --target='./.python_packages/lib/site-packages' -r source/requirements.txt
 
       - name: 'Python: SD-WAN config generator'
         if: ${{ github.event.inputs.site_id != 'None' && github.event.inputs.site_id != '' }}
@@ -136,7 +113,7 @@ jobs:
               KEY_VAULT_URL="${{ secrets.KEY_VAULT_URL }}" \
               MI_CLIENT_ID="${{ secrets.MI_CLIENT_ID }}"
 
-      # Flex Consumption plan
+      # Flex Consumption plan, remote-build: true is a MUST!
       - name: 'Azure Function App deployment'
         uses: azure/functions-action@v1
         id: deploy-to-function-app

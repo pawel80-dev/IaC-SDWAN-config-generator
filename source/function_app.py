@@ -1,9 +1,8 @@
 import logging
 import os
 import azure.functions as func
-import requests
-# from azure.identity import ManagedIdentityCredential
-# from azure.keyvault.secrets import SecretClient
+from azure.identity import ManagedIdentityCredential
+from azure.keyvault.secrets import SecretClient
 
 # Set up logging on info level
 logging.basicConfig(level=logging.INFO)
