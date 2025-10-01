@@ -136,12 +136,14 @@ jobs:
               KEY_VAULT_URL="${{ secrets.KEY_VAULT_URL }}" \
               MI_CLIENT_ID="${{ secrets.MI_CLIENT_ID }}"
 
+      # Flex Consumption plan
       - name: 'Azure Function App deployment'
         uses: azure/functions-action@v1
         id: deploy-to-function-app
         with:
           app-name: ${{ env.AZ_FUNC_APP }}
-          scm-do-build-during-deployment: true
-          enable-oryx-build: true
+          # scm-do-build-during-deployment: true
+          # enable-oryx-build: true
+          remote-build: true
 
 
