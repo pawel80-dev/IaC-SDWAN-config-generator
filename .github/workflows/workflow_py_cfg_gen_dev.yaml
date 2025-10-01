@@ -141,5 +141,7 @@ jobs:
         id: deploy-to-function-app
         with:
           app-name: ${{ env.AZ_FUNC_APP }}
+          scm-do-build-during-deployment: true
+          enable-oryx-build: true
 
 
