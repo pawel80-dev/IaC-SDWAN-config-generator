@@ -42,8 +42,13 @@ jobs:
       - name: 'Python: Install'
         uses: actions/setup-python@v5
         with:
-          python-version: '3.13'
+          python-version: '3.12'
           architecture: 'x64'
+
+      - name: 'Create and start virtual env'
+        run: |
+          python -m venv venv
+          source venv/bin/activate
 
       - name: 'Python: Install dependencies'
         run: |
@@ -72,6 +77,7 @@ jobs:
           name: ${{ env.AZ_FUNC_ARTIFACT }}
           path: |
             .
+            !venv/
             ${{ env.AZ_FUNC_APP_PROJECT_PATH }}
 
 
