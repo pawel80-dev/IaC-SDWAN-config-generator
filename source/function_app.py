@@ -35,10 +35,10 @@ def conf_gen(req: func.HttpRequest) -> str:
     KEY_VAULT_URL = os.environ["KEY_VAULT_URL"]
     MI_CLIENT_ID = os.environ["MI_CLIENT_ID"]
 
-    # credential = ManagedIdentityCredential(client_id=MI_CLIENT_ID)
-    # client = SecretClient(vault_url=KEY_VAULT_URL, credential=credential)
-    # MANAGER_LOGIN = client.get_secret("MANAGER-LOGIN").value
-    # MANAGER_PASS = client.get_secret("MANAGER-PASS").value
+    credential = ManagedIdentityCredential(client_id=MI_CLIENT_ID)
+    client = SecretClient(vault_url=KEY_VAULT_URL, credential=credential)
+    MANAGER_LOGIN = client.get_secret("MANAGER-LOGIN").value
+    MANAGER_PASS = client.get_secret("MANAGER-PASS").value
     site_id = req.params.get("site_id")
     attachment_name = "ciscosdwan.cfg"
     email_subject = f"Bootstrap config for {site_id}"
@@ -50,4 +50,4 @@ def conf_gen(req: func.HttpRequest) -> str:
     If so, please copy the file to a USB drive and plug it into the router.
     """
 
-    return f"Hello, site ID is: {site_id}, KV URL is: {KEY_VAULT_URL}!"
+    return f"Hello, site ID is: {site_id}, KV URL is: {MANAGER_LOGIN}!"
