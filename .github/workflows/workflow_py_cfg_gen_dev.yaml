@@ -70,6 +70,7 @@ jobs:
           python -m pip install --target='source/.python_packages/lib/site-packages' -r source/requirements.txt
           pwd
           ls -l
+          ls -l source/
 
       - name: 'Python: SD-WAN config generator'
         if: ${{ github.event.inputs.site_id != 'None' && github.event.inputs.site_id != '' }}
