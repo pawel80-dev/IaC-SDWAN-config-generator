@@ -54,6 +54,8 @@ jobs:
         run: |
           cd source
           python --version
+          pwd
+          ls -l
           # python -m pip install --upgrade pip
           # python -m pip install -r source/requirements.txt
           python pip install --target='./.python_packages/lib/site-packages' -r requirements.txt
