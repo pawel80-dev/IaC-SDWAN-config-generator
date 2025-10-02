@@ -9,6 +9,15 @@ on:
   # workflow needs to be started manually from main branch
   workflow_dispatch:
     inputs:
+      runtime_env:
+        description: 'Config generator runtime env:'
+        required: true
+        default: 'Github-Workflow'
+        type: choice
+        options:
+          - Github-Workflow
+          - Azure-Function
+          - GC-Function
       site_id:
         description: 'Site name:'
         required: true
