@@ -47,7 +47,7 @@ jobs:
 
   python_code:
     name: 'Generate SDWAN initial config'
-    if: ${{ github.event_name != 'push' || (github.event_name == 'workflow_dispatch' && github.event.inputs.runtime_env == 'Github-Workflow') }}
+    if: ${{ github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && github.event.inputs.runtime_env == 'Github-Workflow') }}
     runs-on: self-hosted
     # runs-on: ubuntu-latest
     steps:
