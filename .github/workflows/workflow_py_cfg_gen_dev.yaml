@@ -3,10 +3,9 @@ name: Python config generator dev
 on:
   push:
     branches:
-      # - 'main'
       - 'dev'
 
-  # workflow needs to be started manually from main branch
+  # Workflow needs to be started manually from main branch
   workflow_dispatch:
     inputs:
       runtime_env:
@@ -31,9 +30,10 @@ env:
   AZ_RG: 'RG-TF-DEV-FUNC'
 
 jobs:
+  # Below job was added after the function app was created
   azure_cfg_gen:
     name: '[Azure]Generate SDWAN initial config'
-    if: ${{ github.event.inputs.runtime_env == 'Azure-Function' && github.event.inputs.site_id != '' }}
+    if: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.runtime_env == 'Azure-Function' && github.event.inputs.site_id != '' }}
     runs-on: self-hosted
     # runs-on: ubuntu-latest
     steps:
@@ -42,11 +42,12 @@ jobs:
 
       - name: 'Python: SD-WAN config generator'
         run: |
-          curl https://func-app-v2-dev.azurewebsites.net/api/cfg?site_id='${{ github.event.inputs.site_id }}'
+          curl 'https://func-app-v2-dev.azurewebsites.net/api/cfg?site_id=${{ github.event.inputs.site_id }}'
 
 
   python_code:
     name: 'Generate SDWAN initial config'
+    if: ${{ github.event_name != 'push' || (github.event_name == 'workflow_dispatch' && github.event.inputs.runtime_env == 'Github-Workflow') }}
     runs-on: self-hosted
     # runs-on: ubuntu-latest
     steps:
@@ -87,7 +88,7 @@ jobs:
 
   function_deploy:
     name: 'Azure Function App Deploy'
-    if: ${{ github.ref == 'refs/heads/dev' }}
+    if: ${{ github.event_name != 'workflow_dispatch' }}
     # runs-on: self-hosted
     runs-on: ubuntu-latest
     needs: python_code
