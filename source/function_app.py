@@ -3,6 +3,9 @@ import os
 import azure.functions as func
 from azure.identity import ManagedIdentityCredential
 from azure.keyvault.secrets import SecretClient
+from manager_api import manager_jsession_id, manager_token, manager_logout,\
+                        manager_bootstrap_gen, manager_device_list, find_device
+from email_api import email_with_attachment
 
 # Set up logging on info level
 logging.basicConfig(level=logging.INFO)
@@ -34,7 +37,6 @@ def conf_gen(req: func.HttpRequest) -> str:
     EMAIL_RECEIVER = os.environ["EMAIL_RECEIVER"]
     KEY_VAULT_URL = os.environ["KEY_VAULT_URL"]
     MI_CLIENT_ID = os.environ["MI_CLIENT_ID"]
-
     # credential = ManagedIdentityCredential(client_id=MI_CLIENT_ID)
     # client = SecretClient(vault_url=KEY_VAULT_URL, credential=credential)
     # MANAGER_LOGIN = client.get_secret("MANAGER-LOGIN").value
@@ -50,4 +52,14 @@ def conf_gen(req: func.HttpRequest) -> str:
     If so, please copy the file to a USB drive and plug it into the router.
     """
 
-    return f"Hello, site ID is: {site_id}, KV URL is: {MANAGER_LOGIN}!"
+    session_id = manager_jsession_id(MANAGER_URL, MANAGER_LOGIN, MANAGER_PASS)
+    token = manager_token(MANAGER_URL, session_id)
+    device_list = manager_device_list(MANAGER_URL, session_id, token)
+    device_uuid = find_device(device_list, site_id)
+    attachment_bootstrap_cfg = manager_bootstrap_gen(MANAGER_URL, session_id, token, device_uuid)
+    email_with_attachment(SMTP_SERVER, EMAIL_SENDER, EMAIL_SENDER_PASSWORD, 
+                          email_subject, email_body, attachment_name, attachment_bootstrap_cfg, 
+                          EMAIL_RECEIVER)
+    manager_logout(MANAGER_URL, session_id)
+
+    return f"Hello, site ID is: {site_id}, config successfuly created!"
