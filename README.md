@@ -1,5 +1,8 @@
 # IAC-SDWAN-config-generator
 
+> [!NOTE]
+> For most of my projects, the leading branch is the **dev** one. That means that *_dev.yaml file is the most frequently used workflow/pipeline.  
+
 Initial config is needed when ISP doesn't provide you DHCP based IP address.  
 In our case there are two options to generate the config:  
 - API call towards Manager to generate full bootstrap config based on existing device configuration  
@@ -13,5 +16,7 @@ Bootstrap file will be send to designated email address.
 
 The whole process could be extended with a few extra steps like Manager - PNP portal sync or attach a template to a new device.  
 
-![alt text](drawings/cfg_gen_v02.png)  
+![alt text](drawings/cfg_gen_v03.png)  
 *Config generator: Possible deployment options*
+
+Descrbie the flows:  
