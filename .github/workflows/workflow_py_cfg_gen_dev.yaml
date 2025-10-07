@@ -178,10 +178,11 @@ jobs:
       - name: 'Deploy to Google Cloud Function'
         run: |
           gcloud run deploy python-http-function \
+            --project first-granite-411019 \
             --source gc_source \
             --function hello_get \
             --base-image python313 \
-            --region REGION \
+            --region 'europe-west4' \
             --allow-unauthenticated
 
       # # https://medium.com/@theironscavenger/deploy-google-cloud-functions-using-github-actions-pt-2-c39108b05d42
