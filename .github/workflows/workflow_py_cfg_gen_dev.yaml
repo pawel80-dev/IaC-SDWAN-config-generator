@@ -175,11 +175,28 @@ jobs:
       - name: 'Use gcloud CLI'
         run: 'gcloud info'
 
-      # - name: 'Deploy to Google Cloud Function'
+      - name: 'Deploy to Google Cloud Function'
+        run: |
+          gcloud run deploy python-http-function \
+            --source gc_source \
+            --function hello_get \
+            --base-image python313 \
+            --region REGION \
+            --allow-unauthenticated
+
+      # # https://medium.com/@theironscavenger/deploy-google-cloud-functions-using-github-actions-pt-2-c39108b05d42
+      # - name: Deploy hello_world_function # Deploy using gcloud functions
       #   run: |
-      #     gcloud run deploy python-http-function \
-      #       --source . \
-      #       --function hello_get \
-      #       --base-image python313 \
-      #       --region REGION \
-      #       --allow-unauthenticated
+      #     gcloud functions deploy hello_world_function \
+      #     --region europe-west1 \
+      #     --source cloud_functions/hello_world \
+      #     --trigger-http \
+      #     --runtime python39
+
+      # # https://github.com/google-github-actions/deploy-cloud-functions
+      # - id: 'deploy'
+      #   uses: 'google-github-actions/deploy-cloud-functions@v4'
+      #   timeout-minutes: 10
+      #   with:
+      #     name: 'my-function'
+      #     runtime: 'python313'
