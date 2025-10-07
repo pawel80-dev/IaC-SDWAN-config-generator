@@ -29,6 +29,11 @@ env:
   AZ_FUNC_APP_PROJECT_PATH: 'source'
   AZ_RG: 'RG-TF-DEV-FUNC'
 
+# Add "id-token" with the intended permissions (Azure/GC Authentication)
+permissions:
+  contents: 'read'
+  id-token: 'write'
+
 jobs:
   # Below job was added after the function app was created
   azure_cfg_gen:
@@ -86,7 +91,7 @@ jobs:
           path: ${{ env.AZ_FUNC_APP_PROJECT_PATH }}
 
 
-  function_deploy:
+  az_function_deploy:
     name: 'Azure Function App Deploy'
     if: ${{ github.event_name != 'workflow_dispatch' }}
     # runs-on: self-hosted
@@ -139,3 +144,42 @@ jobs:
           # scm-do-build-during-deployment: true
           # enable-oryx-build: true
           remote-build: true
+
+
+  gc_function_deploy:
+    name: 'GC Function App Deploy'
+    # if: ${{ github.event_name != 'workflow_dispatch' }}
+    # runs-on: self-hosted
+    runs-on: ubuntu-latest
+    needs: python_code
+    # environment: development
+    permissions:
+      id-token: write # Required for OIDC
+      contents: read # Required for actions/checkout
+    steps:
+      # GitHub OIDC token expires in 5 minutes
+      # without service_account GitHub Action will use Direct Workload Identity Federation
+      - id: 'auth'
+      # - name: 'Google Cloud authentication'
+        uses: 'google-github-actions/auth@v3'
+        with:
+          # project_id: 'my-project' # optional
+          # service_account: 'my-service-account@my-project.iam.gserviceaccount.com'
+          workload_identity_provider: 'projects/716912316033/locations/global/workloadIdentityPools/github/providers/my-repo'
+
+      - name: 'Set up Cloud SDK'
+        uses: 'google-github-actions/setup-gcloud@v3'
+        with:
+          version: '>= 363.0.0'
+
+      - name: 'Use gcloud CLI'
+        run: 'gcloud info'
+
+      # - name: 'Deploy to Google Cloud Function'
+      #   run: |
+      #     gcloud run deploy python-http-function \
+      #       --source . \
+      #       --function hello_get \
+      #       --base-image python313 \
+      #       --region REGION \
+      #       --allow-unauthenticated
