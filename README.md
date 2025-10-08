@@ -16,7 +16,7 @@ Bootstrap file will be send to designated email address.
 
 The whole process could be extended with a few extra steps like Manager - PNP portal sync or attach a template to a new device.  
 
-![alt text](drawings/cfg_gen_v04.png)  
+![alt text](drawings/cfg_gen_v05.png)  
 *Config generator: Possible deployment options*
 
 Descrbie the flows:  

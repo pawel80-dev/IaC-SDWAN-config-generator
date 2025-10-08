@@ -157,10 +157,13 @@ jobs:
       id-token: write # Required for OIDC
       contents: read # Required for actions/checkout
     steps:
+      - name: 'Checkout repository'
+        uses: actions/checkout@v5
+
       # GitHub OIDC token expires in 5 minutes
       # without service_account GitHub Action will use Direct Workload Identity Federation
-      - id: 'auth'
-      # - name: 'Google Cloud authentication'
+      - name: 'Google Cloud authentication'
+        id: 'auth'
         uses: 'google-github-actions/auth@v3'
         with:
           # project_id: 'my-project' # optional
@@ -171,6 +174,7 @@ jobs:
         uses: 'google-github-actions/setup-gcloud@v3'
         with:
           version: '>= 363.0.0'
+          project_id: 'cloud-uno-474513'
 
       - name: 'Use gcloud CLI'
         run: 'gcloud info'
@@ -178,7 +182,7 @@ jobs:
       - name: 'Deploy to Google Cloud Function'
         run: |
           gcloud run deploy python-http-function \
-            --project cloud-uno-474513 \
+            --project first-granite-411019 \
             --source gc_source \
             --function hello_get \
             --base-image python313 \
