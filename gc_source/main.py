@@ -15,4 +15,4 @@ def hello_get(request):
         Functions, see the `Writing HTTP functions` page.
         <https://cloud.google.com/functions/docs/writing/http#http_frameworks>
     """
-    return "Hello World!"
+    return "Hello World2!"
