@@ -1,7 +1,8 @@
 import functions_framework
-import get_public_ip
+from ipify import get_public_ip
 
 ipify_url = "https://api.ipify.org"
+
 
 # HTTP handler function
 @functions_framework.http
