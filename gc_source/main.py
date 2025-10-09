@@ -1,5 +1,9 @@
 import functions_framework
+import get_public_ip
 
+ipify_url = "https://api.ipify.org"
+
+# HTTP handler function
 @functions_framework.http
 def hello_get(request):
     """HTTP Cloud Function.
@@ -15,4 +19,8 @@ def hello_get(request):
         Functions, see the `Writing HTTP functions` page.
         <https://cloud.google.com/functions/docs/writing/http#http_frameworks>
     """
-    return "Hello World2!"
+    if request.args.get == 'ip':
+        public_ip = get_public_ip(ipify_url)
+        return f"Your public IP is {public_ip}."
+    else:
+        return "Hello World!"
