@@ -174,7 +174,7 @@ jobs:
         uses: 'google-github-actions/setup-gcloud@v3'
         with:
           version: '>= 363.0.0'
-          project_id: 'first-granite-411019'
+          # project_id: 'first-granite-411019'
 
       - name: 'Use gcloud CLI'
         run: 'gcloud info'
@@ -189,16 +189,7 @@ jobs:
             --region 'europe-west4' \
             --allow-unauthenticated
 
-      # # Alternative v1
-      # # https://medium.com/@theironscavenger/deploy-google-cloud-functions-using-github-actions-pt-2-c39108b05d42
-      # - name: Deploy hello_world_function # Deploy using gcloud functions
-      #   run: |
-      #     gcloud functions deploy hello_world_function \
-      #     --region europe-west1 \
-      #     --source cloud_functions/hello_world \
-      #     --trigger-http \
-      #     --runtime python39
-
+      # # Alternative (not tested)
       # # https://github.com/google-github-actions/deploy-cloud-functions
       # - id: 'deploy'
       #   uses: 'google-github-actions/deploy-cloud-functions@v4'
