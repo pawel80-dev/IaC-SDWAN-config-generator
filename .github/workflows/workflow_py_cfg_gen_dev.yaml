@@ -189,6 +189,7 @@ jobs:
             --region 'europe-west4' \
             --allow-unauthenticated
 
+            
       # # Alternative 1
       # # https://medium.com/@theironscavenger/deploy-google-cloud-functions-using-github-actions-pt-2-c39108b05d42
       # - name: Deploy hello_world_function # Deploy using gcloud functions
