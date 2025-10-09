@@ -19,4 +19,4 @@ The whole process could be extended with a few extra steps like Manager - PNP po
 ![alt text](drawings/cfg_gen_v05.png)  
 *Config generator: Possible deployment options*
 
-Descrbie the flows:  
+Describie the flows:  
