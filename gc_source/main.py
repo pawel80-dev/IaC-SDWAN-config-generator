@@ -20,7 +20,8 @@ def hello_get(request):
         Functions, see the `Writing HTTP functions` page.
         <https://cloud.google.com/functions/docs/writing/http#http_frameworks>
     """
-    if request.args.get == 'ip':
+    ip = request.args.get('check')
+    if ip == 'ip':
         public_ip = get_public_ip(ipify_url)
         return f"Your public IP is {public_ip}."
     else:

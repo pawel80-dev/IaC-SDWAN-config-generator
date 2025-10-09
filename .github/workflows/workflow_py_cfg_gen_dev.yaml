@@ -26,8 +26,9 @@ on:
 env:
   AZ_FUNC_ARTIFACT: 'fa-py-code-artifact'
   AZ_FUNC_APP: 'func-app-v2-dev' # set this to your function app name
-  AZ_FUNC_APP_PROJECT_PATH: 'source'
+  AZ_FUNC_APP_PROJECT_PATH: 'az_source'
   AZ_RG: 'RG-TF-DEV-FUNC'
+  GC_FUNC_APP_PROJECT_PATH: 'gc_source'
 
 # Add "id-token" with the intended permissions (Azure/GC Authentication)
 permissions:
@@ -183,7 +184,7 @@ jobs:
         run: |
           gcloud run deploy python-http-function \
             --project first-granite-411019 \
-            --source gc_source \
+            --source ${{ env.GC_FUNC_APP_PROJECT_PATH }} \
             --function hello_get \
             --base-image python313 \
             --region 'europe-west4' \

@@ -22,7 +22,6 @@ The whole process could be extended with a few extra steps like Manager - PNP po
 Describie the flows:  
 1. One
 2. Two
-3. Three
-   a) Three a
-   b) Three b
-
+3. Three  
+   a) Three a  
+   b) Three b  
