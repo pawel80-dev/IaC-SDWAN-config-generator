@@ -20,3 +20,6 @@ The whole process could be extended with a few extra steps like Manager - PNP po
 *Config generator: Possible deployment options*
 
 Describie the flows:  
+1.
+2.
+3.
