@@ -174,7 +174,7 @@ jobs:
         uses: 'google-github-actions/setup-gcloud@v3'
         with:
           version: '>= 363.0.0'
-          project_id: 'cloud-uno-474513'
+          project_id: 'first-granite-411019'
 
       - name: 'Use gcloud CLI'
         run: 'gcloud info'
