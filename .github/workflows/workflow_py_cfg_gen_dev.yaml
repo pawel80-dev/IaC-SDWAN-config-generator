@@ -90,9 +90,10 @@ jobs:
         with:
           name: ${{ env.AZ_FUNC_ARTIFACT }}
           path: |
-            ${{ env.AZ_FUNC_APP_PROJECT_PATH }}/*
+            ${{ env.AZ_FUNC_APP_PROJECT_PATH }}/function_app.py
+            ${{ env.AZ_FUNC_APP_PROJECT_PATH }}/host.json
             source
-            !${{ env.AZ_FUNC_APP_PROJECT_PATH }}/requirements.txt
+            !${{ env.AZ_FUNC_APP_PROJECT_PATH }}
             !source/gc
 
 
