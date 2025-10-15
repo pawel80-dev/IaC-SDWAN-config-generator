@@ -1,5 +1,7 @@
 import functions_framework
-from ipify import get_public_ip
+import sys
+sys.path.append("../source")  # setting path to source folder
+from source.ipify import get_public_ip
 
 ipify_url = "https://api.ipify.org"
 

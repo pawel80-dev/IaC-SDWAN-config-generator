@@ -26,9 +26,9 @@ on:
 env:
   AZ_FUNC_ARTIFACT: 'fa-py-code-artifact'
   AZ_FUNC_APP: 'func-app-v2-dev' # set this to your function app name
-  AZ_FUNC_APP_PROJECT_PATH: 'az_source'
+  AZ_FUNC_APP_PROJECT_PATH: 'source/az'
   AZ_RG: 'RG-TF-DEV-FUNC'
-  GC_FUNC_APP_PROJECT_PATH: 'gc_source'
+  GC_FUNC_APP_PROJECT_PATH: 'source/gc'
 
 # Add "id-token" with the intended permissions (Azure/GC Authentication)
 permissions:
@@ -70,7 +70,7 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           python -m pip install -r ${{ env.AZ_FUNC_APP_PROJECT_PATH }}/requirements.txt
-          # python -m pip install --target='./.python_packages/lib/site-packages' -r source/requirements.txt
+          # python -m pip install --target='./.python_packages/lib/site-packages' -r source/az/requirements.txt
 
       - name: 'Python: SD-WAN config generator'
         if: ${{ github.event.inputs.runtime_env == 'Github-Workflow' && github.event.inputs.site_id != 'None' && github.event.inputs.site_id != '' }}
@@ -89,7 +89,11 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: ${{ env.AZ_FUNC_ARTIFACT }}
-          path: ${{ env.AZ_FUNC_APP_PROJECT_PATH }}
+          path: |
+            ${{ env.AZ_FUNC_APP_PROJECT_PATH }}
+            !${{ env.AZ_FUNC_APP_PROJECT_PATH }}/requirements.txt
+            !source/gc
+            source
 
 
   az_function_deploy:
