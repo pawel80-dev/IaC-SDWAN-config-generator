@@ -85,16 +85,24 @@ jobs:
         run: |
           python source/app_cfg_gen.py ${{ github.event.inputs.site_id }}
 
+      - name: 'Create artifact folder'
+        run: |
+          mkdir art_source
+          copy source/*.* art_source/
+          copy ${{ env.AZ_FUNC_APP_PROJECT_PATH }}/function_app.py art_source/
+          copy ${{ env.AZ_FUNC_APP_PROJECT_PATH }}/host.json art_source/
+
       - name: 'Upload artifact'
         uses: actions/upload-artifact@v4
         with:
           name: ${{ env.AZ_FUNC_ARTIFACT }}
           path: |
-            source/ipify.py
-            ${{ env.AZ_FUNC_APP_PROJECT_PATH }}/function_app.py
-            ${{ env.AZ_FUNC_APP_PROJECT_PATH }}/host.json
-            # !source/gc
-            # !source/az
+            art_source
+            # source/ipify.py
+            # ${{ env.AZ_FUNC_APP_PROJECT_PATH }}/function_app.py
+            # ${{ env.AZ_FUNC_APP_PROJECT_PATH }}/host.json
+            # # !source/gc
+            # # !source/az
 
 
   az_function_deploy:
