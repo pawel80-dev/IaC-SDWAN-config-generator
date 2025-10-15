@@ -3,11 +3,11 @@ import os
 import azure.functions as func
 from azure.identity import ManagedIdentityCredential
 from azure.keyvault.secrets import SecretClient
-import sys
-sys.path.append("../source")  # setting path to source folder
-from source.manager_api import manager_jsession_id, manager_token, manager_logout,\
+# import sys
+# sys.path.append("../source")  # setting path to source folder
+from manager_api import manager_jsession_id, manager_token, manager_logout,\
                         manager_bootstrap_gen, manager_device_list, find_device
-from source.email_api import email_with_attachment
+from email_api import email_with_attachment
 
 # Set up logging on info level
 logging.basicConfig(level=logging.INFO)

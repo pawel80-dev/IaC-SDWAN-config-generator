@@ -85,7 +85,7 @@ jobs:
         run: |
           python source/app_cfg_gen.py ${{ github.event.inputs.site_id }}
 
-      - name: 'Create artifact folder'
+      - name: 'Create AZ artifact folder'
         run: |
           mkdir art_source
           cp source/*.* art_source/
@@ -190,14 +190,20 @@ jobs:
           version: '>= 363.0.0'
           # project_id: 'first-granite-411019'
 
-      - name: 'Use gcloud CLI'
-        run: 'gcloud info'
+      # - name: 'Use gcloud CLI'
+      #   run: 'gcloud info'
+
+      - name: 'Create GC artifact folder'
+        run: |
+          mkdir art_gc_source
+          cp source/*.* art_gc_source/
+          cp ${{ env.GC_FUNC_APP_PROJECT_PATH }}/*.* art_gc_source/
 
       - name: 'Deploy to Google Cloud Function'
         run: |
           gcloud run deploy python-http-function \
             --project first-granite-411019 \
-            --source ${{ env.GC_FUNC_APP_PROJECT_PATH }} \
+            --source art_gc_source \
             --function hello_get \
             --base-image python313 \
             --region 'europe-west4' \
