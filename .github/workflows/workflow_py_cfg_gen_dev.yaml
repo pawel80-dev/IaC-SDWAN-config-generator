@@ -92,7 +92,7 @@ jobs:
           path: |
             ${{ env.AZ_FUNC_APP_PROJECT_PATH }}/*.py
             ${{ env.AZ_FUNC_APP_PROJECT_PATH }}/*.json
-            # source
+            source/*.*
             # !source/gc
             # !source/az
 
