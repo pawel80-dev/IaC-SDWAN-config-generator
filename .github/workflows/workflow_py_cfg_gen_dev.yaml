@@ -66,11 +66,19 @@ jobs:
           python-version: '3.13'
           architecture: 'x64'
 
+      - name: 'Create AZ artifact folder'
+        run: |
+          mkdir art_source
+          cp source/*.* art_source/
+          cp ${{ env.AZ_FUNC_APP_PROJECT_PATH }}/function_app.py art_source/
+          cp ${{ env.AZ_FUNC_APP_PROJECT_PATH }}/host.json art_source/
+
       - name: 'Python: Install dependencies'
         run: |
           python -m pip install --upgrade pip
           python -m pip install -r ${{ env.AZ_FUNC_APP_PROJECT_PATH }}/requirements.txt
           # python -m pip install --target='./.python_packages/lib/site-packages' -r source/az/requirements.txt
+        working-directory: art_source
 
       - name: 'Python: SD-WAN config generator'
         if: ${{ github.event.inputs.runtime_env == 'Github-Workflow' && github.event.inputs.site_id != 'None' && github.event.inputs.site_id != '' }}
@@ -84,13 +92,6 @@ jobs:
           MANAGER_PASS: ${{ secrets.MANAGER_PASS }}
         run: |
           python source/app_cfg_gen.py ${{ github.event.inputs.site_id }}
-
-      - name: 'Create AZ artifact folder'
-        run: |
-          mkdir art_source
-          cp source/*.* art_source/
-          cp ${{ env.AZ_FUNC_APP_PROJECT_PATH }}/function_app.py art_source/
-          cp ${{ env.AZ_FUNC_APP_PROJECT_PATH }}/host.json art_source/
 
       - name: 'Upload artifact'
         uses: actions/upload-artifact@v4
