@@ -90,7 +90,7 @@ jobs:
         with:
           name: ${{ env.AZ_FUNC_ARTIFACT }}
           path: |
-            ${{ env.AZ_FUNC_APP_PROJECT_PATH }}
+            ${{ env.AZ_FUNC_APP_PROJECT_PATH }}/*
             source
             !${{ env.AZ_FUNC_APP_PROJECT_PATH }}/requirements.txt
             !source/gc
