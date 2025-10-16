@@ -187,9 +187,6 @@ jobs:
           version: '>= 363.0.0'
           # project_id: 'first-granite-411019'
 
-      # - name: 'Use gcloud CLI'
-      #   run: 'gcloud info'
-
       - name: 'Create GC artifact folder'
         run: |
           mkdir art_gc_source
