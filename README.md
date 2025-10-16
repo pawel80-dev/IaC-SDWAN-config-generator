@@ -16,12 +16,12 @@ Bootstrap file will be send to designated email address.
 
 The whole process could be extended with a few extra steps like Manager - PNP portal sync or attach a template to a new device.  
 
-![alt text](drawings/cfg_gen_v06.png)  
+![alt text](drawings/cfg_gen_v07.png)  
 *Config generator: Possible deployment options*
 
 Config generator, possible deployments:  
 1. Create the config running python code on your laptop
 2. Create the config running Github workflow
 3. Create the config running Github workflow - Function   
-   a) Azure Function 
+   a) Azure Function  
    b) Google Cloud Run Function  
