@@ -8,7 +8,7 @@ ipify_url = "https://api.ipify.org"
 
 # HTTP handler function
 @functions_framework.http
-def hello_get(request):
+def hello_world(request):
     """HTTP Cloud Function.
     Args:
         request (flask.Request): The request object.

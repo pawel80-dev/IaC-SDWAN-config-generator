@@ -198,7 +198,7 @@ jobs:
           gcloud run deploy python-http-function \
             --project first-granite-411019 \
             --source art_gc_source \
-            --function hello_get \
+            --function hello_world \
             --base-image python313 \
             --region 'europe-west4' \
             --allow-unauthenticated
