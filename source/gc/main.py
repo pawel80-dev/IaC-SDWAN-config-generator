@@ -22,9 +22,11 @@ def hello_world(request):
         Functions, see the `Writing HTTP functions` page.
         <https://cloud.google.com/functions/docs/writing/http#http_frameworks>
     """
-    ip = request.args.get('check')
-    if ip == 'ip':
-        public_ip = get_public_ip(ipify_url)
-        return f"Your public IP is {public_ip}."
+    if request.args.get("check"):
+        return "Check Done!"
+    # ip = request.args.get("check")
+    # if ip == "ip":
+    #     public_ip = get_public_ip(ipify_url)
+    #     return f"Your public IP is {public_ip}."
     else:
         return "Hello World!"
