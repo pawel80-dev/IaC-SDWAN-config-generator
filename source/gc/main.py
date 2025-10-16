@@ -1,30 +1,54 @@
-import functions_framework
-# import sys
-# sys.path.append("../source")  # setting path to source folder
-from ipify import get_public_ip
+# import functions_framework
+# # import sys
+# # sys.path.append("../source")  # setting path to source folder
+# from ipify import get_public_ip
 
-ipify_url = "https://api.ipify.org"
+# ipify_url = "https://api.ipify.org"
 
 
-# HTTP handler function
-@functions_framework.http
-def hello_get(request):
-    """HTTP Cloud Function.
-    Args:
-        request (flask.Request): The request object.
-        <https://flask.palletsprojects.com/en/1.1.x/api/#incoming-request-data>
-    Returns:
-        The response text, or any set of values that can be turned into a
-        Response object using `make_response`
-        <https://flask.palletsprojects.com/en/1.1.x/api/#flask.make_response>.
-    Note:
-        For more information on how Flask integrates with Cloud
-        Functions, see the `Writing HTTP functions` page.
-        <https://cloud.google.com/functions/docs/writing/http#http_frameworks>
-    """
-    ip = request.args.get('check')
-    if ip == 'ip':
-        public_ip = get_public_ip(ipify_url)
-        return f"Your public IP is {public_ip}."
-    else:
-        return "Hello World!"
+# # HTTP handler function
+# @functions_framework.http
+# def hello_get(request):
+#     """HTTP Cloud Function.
+#     Args:
+#         request (flask.Request): The request object.
+#         <https://flask.palletsprojects.com/en/1.1.x/api/#incoming-request-data>
+#     Returns:
+#         The response text, or any set of values that can be turned into a
+#         Response object using `make_response`
+#         <https://flask.palletsprojects.com/en/1.1.x/api/#flask.make_response>.
+#     Note:
+#         For more information on how Flask integrates with Cloud
+#         Functions, see the `Writing HTTP functions` page.
+#         <https://cloud.google.com/functions/docs/writing/http#http_frameworks>
+#     """
+#     ip = request.args.get('check')
+#     if ip == 'ip':
+#         public_ip = get_public_ip(ipify_url)
+#         return f"Your public IP is {public_ip}."
+#     else:
+#         return "Hello World!"
+
+
+
+from flask import Flask, request
+
+app = Flask(__name__)
+
+@app.route("/")
+def hello_world():
+    return "Hello World!"
+
+@app.route("/ip")
+def get_ip():
+    ip = request.remote_addr
+    return f"Your IP is {ip}"
+
+@app.route("/echo", methods=["POST"])
+def echo():
+    data = request.get_json(silent=True)
+    return {"received": data}, 200
+
+# Entry point for Cloud Run
+if __name__ == "__main__":
+    app.run(debug=True, host="0.0.0.0", port=8080)

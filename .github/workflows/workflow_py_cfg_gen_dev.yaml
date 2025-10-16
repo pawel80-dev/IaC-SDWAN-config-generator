@@ -60,6 +60,7 @@ jobs:
       - name: 'Checkout repository'
         uses: actions/checkout@v5
 
+      # Python: Install and Python: Install dependencies are needed only for Github-workflow runtime
       # - name: 'Python: Install'
       #   uses: actions/setup-python@v5
       #   with:
@@ -73,6 +74,7 @@ jobs:
       #     # python -m pip install --target='./.python_packages/lib/site-packages' -r source/az/requirements.txt
       #   # working-directory: ''
 
+      # Github-workflow runtime
       - name: 'Python: SD-WAN config generator'
         if: ${{ github.event.inputs.runtime_env == 'Github-Workflow' && github.event.inputs.site_id != 'None' && github.event.inputs.site_id != '' }}
         env:
