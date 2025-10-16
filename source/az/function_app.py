@@ -3,17 +3,20 @@ import os
 import azure.functions as func
 from azure.identity import ManagedIdentityCredential
 from azure.keyvault.secrets import SecretClient
-# import sys
-# sys.path.append("../source")  # setting path to source folder
 from manager_api import manager_jsession_id, manager_token, manager_logout,\
                         manager_bootstrap_gen, manager_device_list, find_device
 from email_api import email_with_attachment
+from ipify import get_public_ip
+# import sys
+# sys.path.append("../source")  # setting path to source folder
 
 # Set up logging on info level
 logging.basicConfig(level=logging.INFO)
 
-app = func.FunctionApp()
+ipify_url = "https://api.ipify.org"
 
+
+app = func.FunctionApp()
 
 # route parameter is changed: api/{functionname} to api/get
 # https://functionAppName.azurewebsites.net/api/get?user=YourName
@@ -22,7 +25,18 @@ app = func.FunctionApp()
 def get_basic(req: func.HttpRequest) -> str:
     logging.info("AZ-FUNC HttpTrigger-basic started.")
     user = req.params.get("user")
+
     return f"Hello, {user}!"
+
+
+# https://functionAppName.azurewebsites.net/api/ipcheck
+@app.function_name(name="HttpTrigger-ip-check")
+@app.route(route="ipcheck", auth_level=func.AuthLevel.ANONYMOUS)
+def ip_check(req: func.HttpRequest) -> str:
+    logging.info("AZ-FUNC HttpTrigger-ip-check started.")
+    public_ip = get_public_ip(ipify_url)
+
+    return f"Your public IP is {public_ip}."
 
 
 # https://functionAppName.azurewebsites.net/api/cfg?site_id=YourSiteID
