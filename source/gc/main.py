@@ -13,12 +13,16 @@ def basic_http(request):
     path = request.path
     user = request.args.get("user")
     site_id = request.args.get("site_id")
+
     if path == "/ipcheck":
         public_ip = get_public_ip(ipify_url)
         return f"Your public IP is {public_ip}."
+    
     if path == "/get" and user:
         return f"Hello, {user}!"
+
     if path == "/cfg" and (site_id == "ABC" or site_id == "None"):
         return f"TEST, site ID is: {site_id}, config was not created!"
+    
     else:
         return "Hello World!"

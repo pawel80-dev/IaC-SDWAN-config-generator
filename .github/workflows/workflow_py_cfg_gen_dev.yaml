@@ -38,29 +38,34 @@ permissions:
 jobs:
   # Below job was added after the function app was created
   azure_cfg_gen:
-    name: '[Azure]Generate SDWAN initial config'
+    name: '[Github-workflow]Generate SDWAN config'
     if: ${{ github.event_name == 'workflow_dispatch' }}
-    runs-on: self-hosted
-    # runs-on: ubuntu-latest
+    # runs-on: self-hosted
+    runs-on: ubuntu-latest
     steps:
       - name: 'Checkout repository'
         uses: actions/checkout@v5
 
-      - name: 'Python: SD-WAN config generator'
+      - name: 'Azure Function: SD-WAN config generator'
         if: ${{ github.event.inputs.runtime_env == 'Azure-Function' && github.event.inputs.site_id != 'None' && github.event.inputs.site_id != '' }}
         run: |
           curl 'https://func-app-v2-dev.azurewebsites.net/api/cfg?site_id=${{ github.event.inputs.site_id }}'
 
+      - name: 'GC Function: SD-WAN config generator'
+        if: ${{ github.event.inputs.runtime_env == 'GC-Function' && github.event.inputs.site_id != 'None' && github.event.inputs.site_id != '' }}
+        run: |
+          curl 'https://python-http-function-716912316033.europe-west4.run.app/cfg?site_id=${{ github.event.inputs.site_id }}'
+
       # Python: Install and Python: Install dependencies are needed only for Github-workflow runtime
       - name: 'Python: Install'
-        if: ${{ github.event.inputs.runtime_env == 'Github-Workflow' }}
+        if: ${{ github.event.inputs.runtime_env == 'Github-Workflow' && github.event.inputs.site_id != 'None' && github.event.inputs.site_id != ''}}
         uses: actions/setup-python@v5
         with:
           python-version: '3.13'
           architecture: 'x64'
 
       - name: 'Python: Install dependencies'
-        if: ${{ github.event.inputs.runtime_env == 'Github-Workflow' }}
+        if: ${{ github.event.inputs.runtime_env == 'Github-Workflow' && github.event.inputs.site_id != 'None' && github.event.inputs.site_id != ''}}
         run: |
           python -m pip install --upgrade pip
           python -m pip install -r ${{ env.AZ_FUNC_APP_PROJECT_PATH }}/requirements.txt
@@ -163,7 +168,7 @@ jobs:
 
   gc_function_deploy:
     name: 'GC Function App Deploy'
-    # if: ${{ github.event_name != 'workflow_dispatch' }}
+    if: ${{ github.event_name != 'workflow_dispatch' }}
     # runs-on: self-hosted
     runs-on: ubuntu-latest
     # needs: az_python_code
