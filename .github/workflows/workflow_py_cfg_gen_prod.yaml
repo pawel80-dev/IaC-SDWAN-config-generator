@@ -1,4 +1,4 @@
-name: Python config generator prod
+name: 'Python config generator prod'
 
 on:
   push:
@@ -6,12 +6,12 @@ on:
       - 'main'
 
 jobs:
-  terraform:
-    name: 'Az Function Python deployment'
+  cfg_gen_prod:
+    name: 'Config generator prod'
     runs-on: ubuntu-latest
     steps:
       - name: 'Checkout repository'
         uses: actions/checkout@v5
 
       - name: Main branch - Prod info
-        run: echo "Lack of resources to build Azure Function PROD environment..."
+        run: echo "Lack of resources to build config generator PROD environment..."
