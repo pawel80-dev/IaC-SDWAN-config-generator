@@ -39,7 +39,7 @@ jobs:
   # Below job was added after the function app was created
   azure_cfg_gen:
     name: '[Azure]Generate SDWAN initial config'
-    if: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.runtime_env == 'Azure-Function' && github.event.inputs.site_id != '' }}
+    if: ${{ github.event_name == 'workflow_dispatch' }}
     runs-on: self-hosted
     # runs-on: ubuntu-latest
     steps:
@@ -47,32 +47,25 @@ jobs:
         uses: actions/checkout@v5
 
       - name: 'Python: SD-WAN config generator'
+        if: ${{ github.event.inputs.runtime_env == 'Azure-Function' && github.event.inputs.site_id != 'None' && github.event.inputs.site_id != '' }}
         run: |
           curl 'https://func-app-v2-dev.azurewebsites.net/api/cfg?site_id=${{ github.event.inputs.site_id }}'
 
-
-  az_python_code:
-    name: 'Generate SDWAN initial config'
-    if: ${{ github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && github.event.inputs.runtime_env == 'Github-Workflow') }}
-    # runs-on: self-hosted
-    runs-on: ubuntu-latest
-    steps:
-      - name: 'Checkout repository'
-        uses: actions/checkout@v5
-
       # Python: Install and Python: Install dependencies are needed only for Github-workflow runtime
-      # - name: 'Python: Install'
-      #   uses: actions/setup-python@v5
-      #   with:
-      #     python-version: '3.13'
-      #     architecture: 'x64'
+      - name: 'Python: Install'
+        if: ${{ github.event.inputs.runtime_env == 'Github-Workflow' }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+          architecture: 'x64'
 
-      # - name: 'Python: Install dependencies'
-      #   run: |
-      #     python -m pip install --upgrade pip
-      #     python -m pip install -r ${{ env.AZ_FUNC_APP_PROJECT_PATH }}/requirements.txt
-      #     # python -m pip install --target='./.python_packages/lib/site-packages' -r source/az/requirements.txt
-      #   # working-directory: ''
+      - name: 'Python: Install dependencies'
+        if: ${{ github.event.inputs.runtime_env == 'Github-Workflow' }}
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r ${{ env.AZ_FUNC_APP_PROJECT_PATH }}/requirements.txt
+          # python -m pip install --target='./.python_packages/lib/site-packages' -r source/az/requirements.txt
+        # working-directory: ''
 
       # Github-workflow runtime
       - name: 'Python: SD-WAN config generator'
@@ -87,6 +80,17 @@ jobs:
           MANAGER_PASS: ${{ secrets.MANAGER_PASS }}
         run: |
           python source/app_cfg_gen.py ${{ github.event.inputs.site_id }}
+
+
+  az_python_code:
+    name: 'Generate SDWAN initial config'
+    # if: ${{ github.event_name == 'push' }}
+    if: ${{ github.event_name != 'workflow_dispatch' }}
+    # runs-on: self-hosted
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Checkout repository'
+        uses: actions/checkout@v5
 
       - name: 'Create AZ artifact folder'
         run: |
