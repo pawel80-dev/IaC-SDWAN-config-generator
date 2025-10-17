@@ -22,7 +22,7 @@ The whole process could be extended with a few extra steps like Manager - PNP po
 ![alt text](drawings/workflow_opt_v01.png)  
 *Config generator: Github workflow options*
 
-Config generator, possible deployments:  
+Config generator, possible deployments (description):  
 1. Create the config running python code on your laptop
 2. Create the config running Github workflow
 3. Create the config running Github workflow - Function   
