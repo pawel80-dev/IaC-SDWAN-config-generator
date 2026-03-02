@@ -31,9 +31,6 @@ env:
   AZ_FUNC_APP_PROJECT_PATH: 'source/az'
   AZ_RG: 'RG-TF-DEV-FUNC'
   GC_FUNC_APP_PROJECT_PATH: 'source/gc'
-  # AZURE_FUNC_APP_NAME: 'tf-dev-func-app'
-  # AZURE_FUNC_APP_PATH: 'source'
-  # PYTHON_VERSION: '3.10'
   ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
   ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
   ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUB_ID }}
