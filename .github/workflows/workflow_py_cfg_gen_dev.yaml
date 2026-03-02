@@ -165,7 +165,7 @@ jobs:
         uses: hashicorp/setup-terraform@v3
         with:
           cli_config_credentials_token: ${{ env.TF_API_TOKEN }}
-          terraform_version: 1.13.3
+          # terraform_version: 1.13.3
 
       # Format terraform configuration files into a canonical format and style
       - name: 'Terraform Format'
