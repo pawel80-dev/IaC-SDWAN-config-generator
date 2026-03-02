@@ -140,10 +140,14 @@ jobs:
     runs-on: ubuntu-latest
     needs: az_python_code
     environment: development
+    
     # permissions:
     #   id-token: write # Required for OIDC
     #   contents: read # Required for actions/checkout
     steps:
+      - name: 'Checkout repository'
+        uses: actions/checkout@v5
+
       - name: 'Download artifact'
         uses: actions/download-artifact@v4
         with:
