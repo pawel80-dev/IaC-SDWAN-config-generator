@@ -24,11 +24,20 @@ on:
         default: 'None'
 
 env:
+  TF_DIR: 'terraform/azure'
+  TF_TFVARS: 'dev.tfvars'
   AZ_FUNC_ARTIFACT: 'fa-py-code-artifact'
   AZ_FUNC_APP: 'func-app-v2-dev' # set this to your function app name
   AZ_FUNC_APP_PROJECT_PATH: 'source/az'
   AZ_RG: 'RG-TF-DEV-FUNC'
   GC_FUNC_APP_PROJECT_PATH: 'source/gc'
+  # AZURE_FUNC_APP_NAME: 'tf-dev-func-app'
+  # AZURE_FUNC_APP_PATH: 'source'
+  # PYTHON_VERSION: '3.10'
+  ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+  ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+  ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUB_ID }}
+  TF_API_TOKEN: ${{ secrets.TF_API_TEAM_TOKEN }}
 
 # Add "id-token" with the intended permissions (Azure/GC Authentication)
 permissions:
@@ -146,9 +155,55 @@ jobs:
       - name: 'Azure CLI login'
         uses: azure/login@v2
         with:
-          client-id: ${{ secrets.AZURE_CLIENT_ID }}
-          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-          subscription-id: ${{ secrets.AZURE_SUB_ID }}
+          client-id: ${{ env.ARM_CLIENT_ID }}
+          tenant-id: ${{ env.ARM_TENANT_ID }}
+          subscription-id: ${{ env.ARM_SUBSCRIPTION_ID }}
+
+      # Install Terraform, provide credentials to the cloud
+      # Terraform API driven workflow
+      - name: 'Terraform initial setup'
+        uses: hashicorp/setup-terraform@v3
+        with:
+          cli_config_credentials_token: ${{ env.TF_API_TOKEN }}
+          terraform_version: 1.13.3
+
+      # Format terraform configuration files into a canonical format and style
+      - name: 'Terraform Format'
+        working-directory: ${{ env.TF_DIR }}
+        id: fmt
+        run: terraform fmt
+ 
+      # Initializes a working directory containing Terraform configuration files
+      - name: 'Terraform Init'
+        working-directory: ${{ env.TF_DIR }}
+        id: init
+        run: terraform init
+       
+      # Validates the configuration files in a directory, referring only to the configuration and not accessing any remote services such as remote state, etc.
+      - name: 'Terraform Validate'
+        working-directory: ${{ env.TF_DIR }}
+        id: validate
+        # -no-color -> Disables terminal formatting sequences in the output
+        run: terraform validate -no-color
+
+      # Creates an execution plan, which lets you preview the changes that Terraform plans to make to your infrastructure
+      - name: 'Terraform Plan'
+        working-directory: ${{ env.TF_DIR }}
+        id: plan
+        run: terraform plan -no-color -var-file=${{ env.TF_TFVARS }}
+        # continue-on-error: true
+
+      # Executes the actions proposed in a Terraform plan
+      - name: 'Terraform Apply'
+        working-directory: ${{ env.TF_DIR }}
+        # -auto-approve -> instruct Terraform to apply the plan without asking for confirmation
+        # -input=false -> Disables Terraform's default behavior of prompting for input
+        run: terraform apply -auto-approve -input=false -var-file=${{ env.TF_TFVARS }}
+
+      # Use only if you want to destroy the infrastructure
+      # - name: 'Terraform Destroy'
+      #   working-directory: ${{ env.TF_DIR }}
+      #   run: terraform destroy --auto-approve
 
       # Key Vault access is done via Managed Identity
       - name: 'Azure Function App config'
