@@ -16,6 +16,7 @@ on:
         options:
           - Github-Workflow
           - Azure-Function
+          - Azure-Container-App
           - GC-Function
       site_id:
         description: 'Site name:'
@@ -52,10 +53,10 @@ jobs:
       - name: 'Checkout repository'
         uses: actions/checkout@v5
 
-      - name: 'Azure Function: SD-WAN config generator'
-        if: ${{ github.event.inputs.runtime_env == 'Azure-Function' && github.event.inputs.site_id != 'None' && github.event.inputs.site_id != '' }}
-        run: |
-          curl 'https://func-app-v2-dev.azurewebsites.net/api/cfg?site_id=${{ github.event.inputs.site_id }}'
+      # - name: 'Azure Function: SD-WAN config generator'
+      #   if: ${{ github.event.inputs.runtime_env == 'Azure-Function' && github.event.inputs.site_id != 'None' && github.event.inputs.site_id != '' }}
+      #   run: |
+      #     curl 'https://func-app-v2-dev.azurewebsites.net/api/cfg?site_id=${{ github.event.inputs.site_id }}'
 
       - name: 'GC Function: SD-WAN config generator'
         if: ${{ github.event.inputs.runtime_env == 'GC-Function' && github.event.inputs.site_id != 'None' && github.event.inputs.site_id != '' }}
@@ -93,34 +94,60 @@ jobs:
           python source/app_cfg_gen.py ${{ github.event.inputs.site_id }}
 
 
-  az_python_code:
-    name: 'Generate SDWAN initial config'
-    # if: ${{ github.event_name == 'push' }}
+  # az_python_code:
+  #   name: '[Azure-Function]Generate SDWAN initial config'
+  #   if: ${{ github.event_name != 'workflow_dispatch' }}
+  #   # runs-on: self-hosted
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: 'Checkout repository'
+  #       uses: actions/checkout@v5
+
+  #     - name: 'Create AZ artifact folder'
+  #       run: |
+  #         mkdir art_source
+  #         cp source/*.* art_source/
+  #         cp ${{ env.AZ_FUNC_APP_PROJECT_PATH }}/*.* art_source/
+
+  #     # For a future update: Deploy to Azure Container Apps
+  #     # - name: 'Deploy Azure Function to Azure Container Apps'
+  #     #   run: |
+  #     #     az containerapp create \
+  #     #       --resource-group $RESOURCE_GROUP_NAME \
+  #     #       --name $CONTAINER_APP_NAME \
+  #     #       --environment $ENVIRONMENT_NAME \
+  #     #       --image mcr.microsoft.com/k8se/quickstart-functions:latest \
+  #     #       --ingress external \
+  #     #       --target-port 80 \
+  #     #       --kind functionapp \
+  #     #       --query properties.outputs.fqdn
+
+  #     - name: 'Upload artifact'
+  #       uses: actions/upload-artifact@v4
+  #       with:
+  #         name: ${{ env.AZ_FUNC_ARTIFACT }}
+  #         path: |
+  #           art_source
+
+
+  az_function_deploy:
+    name: '[Azure-Function]Generate SDWAN initial config'
     if: ${{ github.event_name != 'workflow_dispatch' }}
     # runs-on: self-hosted
     runs-on: ubuntu-latest
+    # needs: az_python_code
+    environment: development
     steps:
+    # second checkout, otherwise terraform path not found error
       - name: 'Checkout repository'
         uses: actions/checkout@v5
 
+    # With a use of artifact, but it could be deployed without it
       - name: 'Create AZ artifact folder'
         run: |
           mkdir art_source
           cp source/*.* art_source/
           cp ${{ env.AZ_FUNC_APP_PROJECT_PATH }}/*.* art_source/
-
-      # For a future update: Deploy to Azure Container Apps
-      # - name: 'Deploy Azure Function to Azure Container Apps'
-      #   run: |
-      #     az containerapp create \
-      #       --resource-group $RESOURCE_GROUP_NAME \
-      #       --name $CONTAINER_APP_NAME \
-      #       --environment $ENVIRONMENT_NAME \
-      #       --image mcr.microsoft.com/k8se/quickstart-functions:latest \
-      #       --ingress external \
-      #       --target-port 80 \
-      #       --kind functionapp \
-      #       --query properties.outputs.fqdn
 
       - name: 'Upload artifact'
         uses: actions/upload-artifact@v4
@@ -128,19 +155,6 @@ jobs:
           name: ${{ env.AZ_FUNC_ARTIFACT }}
           path: |
             art_source
-
-
-  az_function_deploy:
-    name: 'Azure Function App Deploy'
-    if: ${{ github.event_name != 'workflow_dispatch' }}
-    # runs-on: self-hosted
-    runs-on: ubuntu-latest
-    needs: az_python_code
-    environment: development
-    steps:
-    # second checkout, otherwise terraform path not found error
-      - name: 'Checkout repository'
-        uses: actions/checkout@v5
 
       - name: 'Download artifact'
         uses: actions/download-artifact@v4
@@ -230,6 +244,11 @@ jobs:
           # scm-do-build-during-deployment: true
           # enable-oryx-build: true
           remote-build: true
+
+      - name: 'Azure Function: SD-WAN config generator'
+        if: ${{ github.event.inputs.runtime_env == 'Azure-Function' && github.event.inputs.site_id != 'None' && github.event.inputs.site_id != '' }}
+        run: |
+          curl 'https://func-app-v2-dev.azurewebsites.net/api/cfg?site_id=${{ github.event.inputs.site_id }}'
 
 
   gc_function_deploy:
