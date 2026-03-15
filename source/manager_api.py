@@ -11,13 +11,6 @@ logging.basicConfig(level=logging.INFO)
 requests.packages.urllib3.disable_warnings(category=InsecureRequestWarning)
 
 
-manager_url = ""
-login = ""
-password = ""
-my_uuid = ""
-hostname = ""
-
-
 def manager_connectivity_test(manager_url: str) -> None:
     response = requests.get(url=manager_url, verify=False)
     if response.status_code != 200:
@@ -132,6 +125,10 @@ def manager_bootstrap_gen(manager_url: str, jsession_id: str, manager_token: str
 
 def main() -> None:
     # manager_connectivity_test(manager_url)
+    manager_url = "https://vmanage-3335402.sdwan.cisco.com"
+    login = "api-test-ro"
+    password = "42Ac6eef0D8d@3c0019eER82f!6fa6a5b3D2c49"
+    hostname = "CE_PAWEL55"
     session_id = manager_jsession_id(manager_url, login, password)
     token = manager_token(manager_url, session_id)
     device_list = manager_device_list(manager_url, session_id, token)

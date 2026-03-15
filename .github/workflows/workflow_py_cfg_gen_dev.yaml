@@ -32,6 +32,8 @@ env:
   AZ_FUNC_APP_PROJECT_PATH: 'source/az'
   AZ_RG: 'RG-TF-DEV-FUNC'
   GC_FUNC_APP_PROJECT_PATH: 'source/gc'
+  CONTAINER_APP_SOURCE_PATH: 'source/container'
+  CONTAINER_APP_RG: 'RG-DEV-CONTAINER-APP'
   ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
   ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
   ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUB_ID }}
@@ -94,40 +96,48 @@ jobs:
           python source/app_cfg_gen.py ${{ github.event.inputs.site_id }}
 
 
-  # az_python_code:
-  #   name: '[Azure-Function]Generate SDWAN initial config'
-  #   if: ${{ github.event_name != 'workflow_dispatch' }}
-  #   # runs-on: self-hosted
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: 'Checkout repository'
-  #       uses: actions/checkout@v5
+  az_containerapp_deploy:
+    name: '[Azure-ContainerApp]Generate SDWAN initial config'
+    # if: ${{ github.event_name != 'workflow_dispatch' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Checkout repository'
+        uses: actions/checkout@v5
 
-  #     - name: 'Create AZ artifact folder'
-  #       run: |
-  #         mkdir art_source
-  #         cp source/*.* art_source/
-  #         cp ${{ env.AZ_FUNC_APP_PROJECT_PATH }}/*.* art_source/
+      - name: 'Azure CLI login'
+        uses: azure/login@v2
+        with:
+          client-id: ${{ env.ARM_CLIENT_ID }}
+          tenant-id: ${{ env.ARM_TENANT_ID }}
+          subscription-id: ${{ env.ARM_SUBSCRIPTION_ID }}
 
-  #     # For a future update: Deploy to Azure Container Apps
-  #     # - name: 'Deploy Azure Function to Azure Container Apps'
-  #     #   run: |
-  #     #     az containerapp create \
-  #     #       --resource-group $RESOURCE_GROUP_NAME \
-  #     #       --name $CONTAINER_APP_NAME \
-  #     #       --environment $ENVIRONMENT_NAME \
-  #     #       --image mcr.microsoft.com/k8se/quickstart-functions:latest \
-  #     #       --ingress external \
-  #     #       --target-port 80 \
-  #     #       --kind functionapp \
-  #     #       --query properties.outputs.fqdn
+      - name: 'Build and deploy Container App'
+        uses: azure/container-apps-deploy-action@v1
+        with:
+          appSourcePath: ${{ env.CONTAINER_APP_SOURCE_PATH }}
+          # Github Container Registry: ghcr.io
+          registryUrl: 'docker.io'
+          registryUsername: ${{ secrets.DOCKER_REGISTRY_USERNAME }}
+          registryPassword: ${{ secrets.DOCKER_REGISTRY_PASSWORD }}
+          location: 'polandcentral'
+          resourceGroup: ${{ env.CONTAINER_APP_RG }}
+          containerAppName: 'container-app3'
+          imageToBuild: 'docker.io/pawel80/hello-docker:latest'
 
-  #     - name: 'Upload artifact'
-  #       uses: actions/upload-artifact@v4
-  #       with:
-  #         name: ${{ env.AZ_FUNC_ARTIFACT }}
-  #         path: |
-  #           art_source
+      # - name: 'Azure ContainerApp config'
+      #   uses: azure/cli@v2
+      #   with:
+      #     azcliversion: latest
+      #     inlineScript: |
+      #       az containerapp up \
+      #         --name container-app2 \
+      #         --resource-group RG-DEV-CONTAINER-APP \
+      #         --location polandcentral \
+      #         --environment 'container-app-env' \
+      #         --image docker.io/pawel80/hello-docker:latest \
+      #         --target-port 80 \
+      #         --ingress external \
+      #         --query properties.configuration.ingress.fqdn
 
 
   az_function_deploy:
