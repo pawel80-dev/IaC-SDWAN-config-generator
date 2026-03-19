@@ -124,8 +124,8 @@ jobs:
           location: 'polandcentral'
           resourceGroup: ${{ env.CONTAINER_APP_RG }}
           containerAppEnvironment: 'container-app-env'
-          containerAppName: 'container-app3'
-          imageToBuild: 'docker.io/pawel80/webserver-docker:latest'
+          containerAppName: 'container-app'
+          imageToBuild: 'docker.io/pawel80/fastapi-server:latest'
 
       # - name: 'Azure ContainerApp config'
       #   uses: azure/cli@v2
