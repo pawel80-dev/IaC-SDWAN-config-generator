@@ -16,13 +16,18 @@ def ip_check():
     return {"public_ip": public_ip}
 
 
-@app.get("/user/{user_name}")
+@app.get("/user/")
+# http://127.0.0.1/user/?name=John
 # user_name could be string or None, default value is None
-def read_item(user_name: str | None = None):
-    if user_name:
-        return {"message": f"Hello, {user_name}!"}
+def read_item(name: str | None = None):
+    if name:
+        return {"message": f"Hello, {name}!"}
+    elif name == "":
+        return {"message": "Hello, empty user!"}
+    elif name is None:
+        return {"message": "Hello, None user!"}
     else:
-        return {"message": "Hello, unknown user!"}
+        return {"message": "Hello..."}
 
 
 # https://functionAppName.azurewebsites.net/api/cfg?site_id=YourSiteID
