@@ -127,9 +127,7 @@ jobs:
           containerAppName: 'container-app'
           imageToBuild: 'docker.io/pawel80/fastapi-server:latest'
           environmentVariables: |
-            'SMTP_SERVER=${{ secrets.SMTP_SERVER }}' 'EMAIL_SENDER=${{ secrets.EMAIL_SENDER }}' 'EMAIL_SENDER_PASSWORD=${{ secrets.EMAIL_SENDER_PASSWORD }}'
-
-          # "EMAIL_RECEIVER=${{ secrets.EMAIL_RECEIVER }}" \
+            'SMTP_SERVER=${{ secrets.SMTP_SERVER }}' 'EMAIL_SENDER=${{ secrets.EMAIL_SENDER }}' 'EMAIL_SENDER_PASSWORD=${{ secrets.EMAIL_SENDER_PASSWORD }}' 'EMAIL_RECEIVER=${{ secrets.EMAIL_RECEIVER }}'
           # "MANAGER_URL=${{ secrets.MANAGER_URL }}" \
           # "MANAGER_LOGIN=${{ secrets.MANAGER_LOGIN }}" \
           # "MANAGER_PASS=${{ secrets.MANAGER_PASS }}"
