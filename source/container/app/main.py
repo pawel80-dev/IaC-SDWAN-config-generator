@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from ipify import get_public_ip
+import os
 
 app = FastAPI()
 
@@ -28,6 +29,14 @@ def read_item(name: str | None = None):
         return {"message": "Hello, None user!"}
     else:
         return {"message": "Hello..."}
+
+
+@app.get("/cfg/")
+# http://127.0.0.1/cfg/?site_id=YourSiteID
+# site_id could be string or None, default value is None
+def read_item(site_id: str | None = None):
+    MANAGER_URL = os.environ["MANAGER_URL"]
+    return {"message": f"Manager URL: {MANAGER_URL}"}
 
 
 # https://functionAppName.azurewebsites.net/api/cfg?site_id=YourSiteID
