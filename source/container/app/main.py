@@ -36,7 +36,7 @@ def read_item(name: str | None = None):
 # site_id could be string or None, default value is None
 def read_item(site_id: str | None = None):
     MANAGER_URL = os.environ["MANAGER_URL"]
-    return {"message": f"Manager URL: {MANAGER_URL}"}
+    return {"Manager URL": MANAGER_URL}
 
 
 # https://functionAppName.azurewebsites.net/api/cfg?site_id=YourSiteID
