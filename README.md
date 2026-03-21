@@ -22,5 +22,7 @@ Config generator, possible deployments (description):
 4. Create the config running Github workflow: Google Cloud Run Function
 5. Create the config running Github workflow: Azure Conteiner Apps
 
-![alt text](drawings/workflow_opt_v01.png)  
+![alt text](drawings/workflow_opt_v02.png)  
 *Config generator: Github workflow options*  
+
+For drawings I've moved from Microsoft Visio to draw.io  
