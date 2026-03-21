@@ -72,7 +72,6 @@ def read_item(site_id: str | None = None):
                               EMAIL_RECEIVER)
         manager_logout(MANAGER_URL, session_id)
 
-        return f"Hello, site ID is: {site_id}, config successfuly created!"
-
+        return {"message": f"Hello, site ID is: {site_id}, config successfuly created!"}
     else:
-        return f"TEST, site ID is: {site_id}, config was not created!"
+        return {"message": f"TEST, site ID is: {site_id}, config was not created!"}
